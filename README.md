@@ -8,6 +8,7 @@ Pencatat pengeluaran bulanan sederhana dalam satu file HTML. Tanpa server, tanpa
 - Isi pendapatan bulanan secara manual (tersimpan terpisah untuk tiap bulan)
 - Lihat total pengeluaran, sisa uang, dan persentase pendapatan yang sudah terpakai
 - Ringkasan pengeluaran per kategori
+- Saring tabel per kategori: ketuk salah satu kategori (Makan, Belanja, dll.) untuk melihat satu kategori saja, lalu ketuk lagi atau pilih Semua untuk kembali
 - Pindah antar bulan dengan pemilih bulan
 - Hapus satu pengeluaran, atau hapus semua data pada bulan yang dipilih
 - Unduh data bulan aktif sebagai file CSV
