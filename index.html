@@ -42,8 +42,11 @@ button{cursor:pointer;border:0;border-radius:6px;padding:10px 14px;font-weight:6
 .primary{background:var(--acc);color:var(--acc-ink);align-self:end}
 .ghost{background:transparent;border:1px solid var(--line)}
 .cats{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.cats span{padding:4px 10px;border:1px solid var(--line);border-radius:99px;font-size:.85rem;background:var(--card)}
-.cats b{font-weight:600}
+.chip{padding:6px 12px;border:1px solid var(--line);border-radius:99px;font-size:.85rem;font-weight:400;background:var(--card)}
+.chip b{font-weight:600}
+.chip.on{background:var(--acc);color:var(--acc-ink);border-color:var(--acc)}
+.info{font-size:.9rem;color:var(--mute);margin:-6px 0 12px}
+.info:empty{display:none}
 .scroll{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:10px}
 table{width:100%;border-collapse:collapse;min-width:520px}
 th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
@@ -94,6 +97,7 @@ td button{padding:4px 8px;background:none;color:var(--warn)}
   </form>
 
   <div class="cats" id="cats"></div>
+  <div class="info" id="info"></div>
 
   <div class="scroll">
     <table>
@@ -184,6 +188,7 @@ $('bulan').value = hariIni.getFullYear() + '-' + pad(hariIni.getMonth() + 1);
 $('tgl').value = $('bulan').value + '-' + pad(hariIni.getDate());
 
 const esc = s => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let filterKat = '';
 const ringkasan = () => {
   const b = $('bulan').value;
   const masuk = pemasukan[b] || 0;
@@ -206,10 +211,14 @@ const tampil = () => {
 
   const per = {};
   rows.forEach(d => per[d.kat] = (per[d.kat] || 0) + d.jml);
-  $('cats').innerHTML = Object.entries(per).sort((a, z) => z[1] - a[1])
-    .map(([k, v]) => `<span>${esc(k)}: <b>${rp(v)}</b></span>`).join('');
+  if (filterKat && !per[filterKat]) filterKat = '';
+  const chip = (k, t, aktif) => `<button type="button" class="chip${aktif ? ' on' : ''}" data-kat="${esc(k)}" aria-pressed="${aktif}">${t}</button>`;
+  $('cats').innerHTML = chip('', 'Semua', !filterKat) + Object.entries(per).sort((a, z) => z[1] - a[1])
+    .map(([k, v]) => chip(k, `${esc(k)}: <b>${rp(v)}</b>`, k === filterKat)).join('');
+  const tampilRows = filterKat ? rows.filter(d => d.kat === filterKat) : rows;
+  $('info').textContent = filterKat ? `${filterKat}: ${tampilRows.length} catatan, total ${rp(per[filterKat])}` : '';
 
-  $('isi').innerHTML = rows.length ? rows.map(d => `<tr>
+  $('isi').innerHTML = tampilRows.length ? tampilRows.map(d => `<tr>
     <td>${new Date(d.tgl).toLocaleDateString('id-ID', {day:'numeric', month:'short'})}</td>
     <td>${esc(d.kat)}</td><td>${esc(d.ket)}</td>
     <td class="num">${rp(d.jml)}</td>
@@ -230,6 +239,12 @@ $('isi').addEventListener('click', e => {
   antri({t: 'del', id: Number(id)});
 });
 $('bulan').addEventListener('change', tampil);
+$('cats').addEventListener('click', e => {
+  const b = e.target.closest('.chip');
+  if (!b) return;
+  filterKat = b.dataset.kat === filterKat ? '' : b.dataset.kat;
+  tampil();
+});
 $('masuk').addEventListener('input', () => {
   pemasukan[$('bulan').value] = Math.max(0, Number($('masuk').value) || 0);
   simpan(); ringkasan();
