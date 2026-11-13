@@ -4,51 +4,71 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pengeluaran Bulanan</title>
-<meta name="theme-color" content="#0f6b57">
+<meta name="theme-color" id="tc" content="#eef2ef">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#eef2ef;--card:#fbfcfb;--ink:#16302a;--mute:#5d726b;--line:#d3ddd8;--acc:#0f6b57;--acc-ink:#fff;--warn:#b3402a}
-@media (prefers-color-scheme:dark){:root{--bg:#10201c;--card:#172a25;--ink:#e6f0ec;--mute:#93aaa2;--line:#2b443d;--acc:#4fc4a6;--acc-ink:#0b1d18;--warn:#f08a74}}
+:root{
+  --acc:#0f6b57;--af:#0f6b57;--of:#fff;
+  --bg:color-mix(in srgb,var(--acc) 5%,#f6f7f6);
+  --card:color-mix(in srgb,var(--acc) 2%,#fff);
+  --line:color-mix(in srgb,var(--acc) 15%,#dde1df);
+  --ink:#16302a;--mute:#5d726b;--warn:#b3402a;
+  --fill:color-mix(in srgb,var(--ink) 7%,transparent);
+}
+:root[data-mode="dark"]{
+  --acc:#4fc4a6;--af:#4fc4a6;--of:#0b1d18;
+  --bg:color-mix(in srgb,var(--acc) 6%,#0f1513);
+  --card:color-mix(in srgb,var(--acc) 10%,#14191a);
+  --line:color-mix(in srgb,var(--acc) 22%,#222826);
+  --ink:#e6f0ec;--mute:#93aaa2;--warn:#f08a74;
+}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Figtree,system-ui,sans-serif}
 main{max-width:860px;margin:0 auto;padding:24px 16px 64px}
 h1{font-size:1.6rem;font-weight:800;margin:0 0 4px}
-.sub{color:var(--mute);margin:0 0 20px}
-.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:end;justify-content:space-between;margin-bottom:16px}
+.sub{color:var(--mute);margin:0;font-size:.9rem}
 .sync{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between;margin:0 0 20px}
-.sync .sub{margin:0;font-size:.9rem}
-dialog{border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);width:calc(100% - 32px);max-width:420px;padding:16px}
-dialog::backdrop{background:rgba(0,0,0,.5)}
-dialog form{border:0;padding:0;margin:0;background:none}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:end;justify-content:space-between;margin-bottom:16px}
 .bulan-nama{font-size:1.3rem;font-weight:600;text-transform:capitalize}
-.ringkas{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:16px}
-.ringkas>div{padding:14px;background:var(--card);border:1px solid var(--line);border-radius:10px}
-.ringkas label{margin:0 0 4px}
-.ringkas .angka{font-size:1.5rem;font-weight:800;line-height:1.3;font-variant-numeric:tabular-nums}
-.ringkas .angka.minus{color:var(--warn)}
-.ringkas .ket{font-size:.8rem;color:var(--mute);margin-top:2px}
 label{display:block;font-size:.85rem;color:var(--mute);margin-bottom:4px}
 input,select,button{font:inherit;color:inherit}
 input,select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:6px;background:var(--card)}
 input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:20px}
-form .wide{grid-column:1/-1}
-@media(min-width:640px){form .wide{grid-column:span 2}}
 button{cursor:pointer;border:0;border-radius:6px;padding:10px 14px;font-weight:600}
-.primary{background:var(--acc);color:var(--acc-ink);align-self:end}
+.primary{background:var(--af);color:var(--of);align-self:end}
 .ghost{background:transparent;border:1px solid var(--line)}
-.cats{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.chip{padding:6px 12px;border:1px solid var(--line);border-radius:99px;font-size:.85rem;font-weight:400;background:var(--card)}
+.danger{color:var(--warn)}
+
+/* Ringkasan */
+.ringkas{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:16px}
+.ringkas>div{padding:14px;background:var(--card);border:1px solid var(--line);border-radius:10px}
+.ringkas label{margin:0 0 4px}
+.lbl{font-size:.85rem;color:var(--mute);margin-bottom:4px}
+.angka{font-size:1.5rem;font-weight:800;line-height:1.3;font-variant-numeric:tabular-nums}
+.angka.minus{color:var(--warn)}
+.ket{font-size:.8rem;color:var(--mute);margin-top:2px}
+
+/* Form tambah */
+#form{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:20px}
+#form .wide{grid-column:1/-1}
+@media(min-width:640px){#form .wide{grid-column:span 2}}
+
+/* Penyaring kategori */
+.cats{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.chip{padding:4px 12px;border:1px solid var(--line);border-radius:99px;font-size:.85rem;font-weight:400;background:var(--card)}
 .chip b{font-weight:600}
-.chip.on{background:var(--acc);color:var(--acc-ink);border-color:var(--acc)}
-.info{font-size:.9rem;color:var(--mute);margin:-6px 0 12px}
+.chip.on{background:var(--af);color:var(--of);border-color:transparent}
+.info{font-size:.9rem;color:var(--mute);margin:0 0 12px}
 .info:empty{display:none}
+
+/* Tabel */
 .scroll{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:10px}
-table{width:100%;border-collapse:collapse;min-width:520px}
+table{width:100%;border-collapse:collapse}
 th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
 th{font-size:.85rem;color:var(--mute);font-weight:600}
 td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
@@ -56,33 +76,97 @@ tr:last-child td{border-bottom:0}
 td button{padding:4px 8px;background:none;color:var(--warn)}
 .empty{padding:28px;text-align:center;color:var(--mute)}
 .foot{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+@media(max-width:480px){th,td{padding:10px 8px;font-size:.92rem}}
+
+/* Dialog */
+dialog{border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);width:calc(100% - 32px);max-width:420px;padding:16px}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+dialog h2{margin:0 0 4px;font-size:1.15rem;font-weight:800}
+dialog p{margin:0;color:var(--mute);font-size:.9rem}
+#fsync,#ftema{display:grid;gap:12px}
+.aksi{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+
+/* Pilihan tema */
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding:3px;border-radius:8px;background:var(--fill)}
+.seg button{padding:7px 0;font-size:.9rem;font-weight:600;color:var(--mute);background:none;border-radius:6px}
+.seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 0 0 1px var(--line)}
+.warna{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;padding:4px 0}
+.sw{width:40px;height:40px;padding:0;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.sw svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;opacity:0}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--acc)}
+.sw[aria-pressed="true"] svg{opacity:1}
+.nama-warna{text-align:center;font-size:.9rem;color:var(--mute);margin-top:-4px}
 </style>
+<script>
+// Tema: mode (otomatis/terang/gelap) + warna aksen pastel ala Material
+(function () {
+  var pastel = function (n, p, a) { return {n: n, f: [p, p], t: ['#1d1d1f', '#1d1d1f'], a: [a, p]}; };
+  window.PALET = [
+    {n: 'Bawaan', f: ['#0f6b57', '#4fc4a6'], t: ['#ffffff', '#0b1d18'], a: ['#0f6b57', '#4fc4a6']},
+    pastel('Merah', '#EF9A9A', '#D32F2F'),
+    pastel('Pink', '#F48FB1', '#C2185B'),
+    pastel('Ungu', '#CE93D8', '#7B1FA2'),
+    pastel('Ungu tua', '#B39DDB', '#512DA8'),
+    pastel('Indigo', '#9FA8DA', '#303F9F'),
+    pastel('Biru', '#90CAF9', '#1976D2'),
+    pastel('Biru muda', '#81D4FA', '#0277BD'),
+    pastel('Cyan', '#80DEEA', '#00838F'),
+    pastel('Teal', '#80CBC4', '#00796B'),
+    pastel('Hijau', '#A5D6A7', '#2E7D32'),
+    pastel('Jingga', '#FFAB91', '#D84315'),
+    pastel('Abu biru', '#B0BEC5', '#455A64')
+  ];
+  try { window.TEMA = JSON.parse(localStorage.getItem('tema-v1')) || {}; } catch (e) { window.TEMA = {}; }
+  var mq = window.matchMedia('(prefers-color-scheme: dark)');
+  window.terapkanTema = function () {
+    var gelap = TEMA.mode === 'dark' || (TEMA.mode !== 'light' && mq.matches);
+    var d = gelap ? 1 : 0;
+    var w = PALET.filter(function (x) { return x.n === TEMA.warna; })[0] || PALET[0];
+    var r = document.documentElement;
+    r.setAttribute('data-mode', gelap ? 'dark' : 'light');
+    r.style.colorScheme = gelap ? 'dark' : 'light';
+    r.style.setProperty('--af', w.f[d]);
+    r.style.setProperty('--of', w.t[d]);
+    r.style.setProperty('--acc', w.a[d]);
+    var tc = document.getElementById('tc');
+    if (tc) tc.setAttribute('content', gelap ? '#10201c' : '#eef2ef');
+  };
+  mq.addEventListener('change', function () { if (TEMA.mode !== 'light' && TEMA.mode !== 'dark') terapkanTema(); });
+  terapkanTema();
+})();
+</script>
 </head>
 <body>
 <main>
   <h1>Pengeluaran bulanan</h1>
-  <div class="sync"><span class="sub" id="status"></span><button class="ghost" id="setelan" type="button">Atur sinkron</button></div>
+  <div class="sync">
+    <span class="sub" id="status"></span>
+    <div class="tools">
+      <button class="ghost" id="btnTema" type="button">◐ Tampilan</button>
+      <button class="ghost" id="setelan" type="button">Atur sinkron</button>
+    </div>
+  </div>
 
   <div class="bar">
     <div class="bulan-nama" id="bulanLabel"></div>
     <div><label for="bulan">Bulan</label><input type="month" id="bulan"></div>
   </div>
 
-  <div class="ringkas">
+  <section class="ringkas">
     <div>
       <label for="masuk">Pendapatan (Rp)</label>
       <input type="number" id="masuk" min="0" step="any" inputmode="numeric" placeholder="Isi manual">
     </div>
     <div>
-      <label>Pengeluaran</label>
+      <div class="lbl">Pengeluaran</div>
       <div class="angka" id="total">Rp0</div>
     </div>
     <div>
-      <label>Sisa</label>
+      <div class="lbl">Sisa</div>
       <div class="angka" id="sisa">Rp0</div>
       <div class="ket" id="persen"></div>
     </div>
-  </div>
+  </section>
 
   <form id="form">
     <div><label for="tgl">Tanggal</label><input type="date" id="tgl" required></div>
@@ -107,19 +191,40 @@ td button{padding:4px 8px;background:none;color:var(--warn)}
   </div>
 
   <div class="foot">
-    <button class="ghost" id="csv">Unduh CSV</button>
-    <button class="ghost" id="hapus">Hapus semua data bulan ini</button>
+    <button class="ghost" id="csv" type="button">Unduh CSV</button>
+    <button class="ghost danger" id="hapus" type="button">Hapus semua data bulan ini</button>
   </div>
 </main>
 
+<dialog id="dtema">
+  <form id="ftema" method="dialog">
+    <div>
+      <h2>Tampilan</h2>
+      <p>Pilih mode dan warna aksen.</p>
+    </div>
+    <div class="seg" id="pilihMode" role="group" aria-label="Mode tampilan">
+      <button type="button" data-m="auto">Otomatis</button>
+      <button type="button" data-m="light">Terang</button>
+      <button type="button" data-m="dark">Gelap</button>
+    </div>
+    <div class="warna" id="pilihWarna" role="group" aria-label="Warna aksen"></div>
+    <div class="nama-warna" id="namaWarna"></div>
+    <div class="aksi"><button class="primary">Selesai</button></div>
+  </form>
+</dialog>
+
 <dialog id="dlg">
   <form id="fsync" method="dialog">
-    <div class="wide"><label for="surl">URL Apps Script (berakhir /exec)</label><input id="surl" type="url" required placeholder="https://script.google.com/macros/s/.../exec"></div>
-    <div class="wide"><label for="spin">PIN</label><input id="spin" type="password" autocomplete="off" required></div>
-    <div class="wide" style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="primary" value="simpan">Simpan &amp; sambungkan</button>
-      <button class="ghost" type="button" id="putus">Putuskan</button>
+    <div>
+      <h2>Atur sinkron</h2>
+      <p>Hubungkan ke Google Sheets agar datanya sama di semua HP.</p>
+    </div>
+    <div><label for="surl">URL Apps Script (berakhir /exec)</label><input id="surl" type="url" required placeholder="https://script.google.com/macros/s/.../exec"></div>
+    <div><label for="spin">PIN</label><input id="spin" type="password" autocomplete="off" required></div>
+    <div class="aksi">
+      <button class="ghost danger" type="button" id="putus">Putuskan</button>
       <button class="ghost" value="batal" formnovalidate>Tutup</button>
+      <button class="primary" value="simpan">Simpan</button>
     </div>
   </form>
 </dialog>
@@ -292,6 +397,25 @@ $('putus').addEventListener('click', () => {
 addEventListener('online', sinkron);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) sinkron(); });
 setInterval(() => { if (!document.hidden) sinkron(); }, 30000);
+const simpanTema = () => { try { localStorage.setItem('tema-v1', JSON.stringify(TEMA)); } catch (e) {} };
+const gambarTema = () => {
+  const d = document.documentElement.dataset.mode === 'dark' ? 1 : 0;
+  const aktif = TEMA.warna || 'Bawaan', mode = TEMA.mode || 'auto';
+  $('pilihWarna').innerHTML = PALET.map(w => `<button type="button" class="sw" data-n="${w.n}" aria-label="${w.n}" aria-pressed="${w.n === aktif}" style="background:${w.f[d]};color:${w.t[d]}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg></button>`).join('');
+  $('namaWarna').textContent = 'Warna: ' + aktif;
+  document.querySelectorAll('#pilihMode button').forEach(b => b.setAttribute('aria-pressed', b.dataset.m === mode));
+};
+$('btnTema').addEventListener('click', () => { gambarTema(); $('dtema').showModal(); });
+$('pilihWarna').addEventListener('click', e => {
+  const b = e.target.closest('.sw');
+  if (!b) return;
+  TEMA.warna = b.dataset.n; simpanTema(); terapkanTema(); gambarTema();
+});
+$('pilihMode').addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  TEMA.mode = b.dataset.m; simpanTema(); terapkanTema(); gambarTema();
+});
 statusDasar(); sinkron();
 </script>
 </body>

@@ -14,6 +14,7 @@ Pencatat pengeluaran bulanan sederhana dalam satu file HTML. Tanpa server, tanpa
 - Unduh data bulan aktif sebagai file CSV
 - Sinkron antar HP (misalnya HP pasangan) lewat Google Sheets, dilindungi PIN
 - Tetap bisa mencatat saat offline; perubahan dikirim otomatis begitu ada sinyal
+- Ganti tampilan lewat tombol Tampilan di bagian atas halaman: mode Otomatis/Terang/Gelap dan 12 warna aksen pastel ala Material (pilihan tersimpan di perangkat)
 - Tampilan menyesuaikan mode terang/gelap perangkat dan nyaman dipakai di HP
 
 ## Cara pasang di GitHub Pages
